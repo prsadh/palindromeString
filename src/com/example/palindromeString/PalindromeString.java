@@ -14,6 +14,8 @@ public class PalindromeString {
         String inputString = scanner.nextLine();
 
         Calculator calculator = new Calculator();
-        calculator.calculatePalindrome(size,inputString);
+        calculator.calculatePalindromeThroughTree(size,inputString);
+
+        calculator.calculatePalindromeThroughList(size,inputString);
     }
 }

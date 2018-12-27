@@ -7,19 +7,26 @@ import java.util.List;
 
 public class Calculator {
 
-    public void calculatePalindrome(int cuts, String input){
-
+    public void calculatePalindromeThroughTree(int cuts, String input){
+        long startTime = System.currentTimeMillis();
         Tree<List<String>> tree = createTree(Arrays.asList(input), "0", cuts, null);
         List<List<String>> leafNodes = Util.getLeafNodes(tree, null);
-        int countPalindrome = 0;
-        for(List<String> item : leafNodes) {
-            for(String str : item) {
-                countPalindrome += Util.isPalindrome(str);
-            }
-        }
+        int countPalindrome = Util.getCountPalindrome(leafNodes);
+        long endTime = System.currentTimeMillis();
+        System.out.println(String.format("Number of palindromes with %d cuts is %d in string %s taking %d ms",
+                cuts,countPalindrome,input, endTime - startTime));
 
-        System.out.println(String.format("Number of palindromes with %d cuts is %d in string %s",cuts,countPalindrome,input));
+    }
 
+
+
+    public void calculatePalindromeThroughList(int cuts, String input) {
+        long startTime = System.currentTimeMillis();
+        List<List<String>> leafNodes = getCombinationArray(Arrays.asList(input), cuts, null);
+        int countPalindrome = Util.getCountPalindrome(leafNodes);
+        long endTime = System.currentTimeMillis();
+        System.out.println(String.format("Number of palindromes with %d cuts is %d in string %s taking %d ms",
+                cuts,countPalindrome,input, endTime - startTime));
     }
 
     public Tree<List<String>> createTree(List<String> input, String key, int cuts, HashMap<String, Tree<List<String>>> tree) {
@@ -53,6 +60,31 @@ public class Calculator {
         }
 
         return root;
+    }
+
+
+    public List<List<String>> getCombinationArray(List<String> input, int cuts,
+                                                   List<List<String>> outputList) {
+
+        int lastIndex = input.size() - 1;
+        if(outputList == null) {
+            outputList = new ArrayList<>();
+        }
+        for(int i = 1; i <= input.get(lastIndex).length() - cuts ; i++ ) {
+            List<String> newArr = new ArrayList<>();
+            for(int j = 0; j < input.size()-1; j++) {
+                newArr.add(input.get(j));
+            }
+            newArr.add(input.get(lastIndex).substring(0,i));
+            newArr.add(input.get(lastIndex).substring(i));
+            if(cuts - 1 > 0 ) {
+                getCombinationArray(newArr,cuts - 1, outputList);
+            } else {
+                outputList.add(newArr);
+            }
+        }
+
+        return outputList;
     }
 
 }

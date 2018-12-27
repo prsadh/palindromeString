@@ -31,4 +31,14 @@ public class Util {
 
         return output;
     }
+
+    public static int getCountPalindrome(List<List<String>> leafNodes) {
+        int countPalindrome = 0;
+        for(List<String> item : leafNodes) {
+            for(String str : item) {
+                countPalindrome += Util.isPalindrome(str);
+            }
+        }
+        return countPalindrome;
+    }
 }
